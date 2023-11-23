@@ -17,15 +17,58 @@ import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu/CheckoutSide
 import { Register } from "../Register/Register";
 import { useContext } from "react";
 import { Message } from "../../Components/Message/Message";
+import { RequireAuth } from "../../Components/RequireAuth/RequireAuth";
 
 const AppRoutes = () => {
   let routes = useRoutes([
-    { path: "/", element: <Home /> },
-    { path: "/:category", element: <Home /> },
-    { path: "/my-account", element: <MyAccount /> },
-    { path: "/my-order", element: <MyOrder /> },
-    { path: "/my-orders", element: <MyOrders /> },
-    { path: "/my-order/:id", element: <MyOrder /> },
+    {
+      path: "/",
+      element: (
+        <RequireAuth>
+          <Home />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/:category",
+      element: (
+        <RequireAuth>
+          <Home />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/my-account",
+      element: (
+        <RequireAuth>
+          <MyAccount />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/my-order",
+      element: (
+        <RequireAuth>
+          <MyOrder />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/my-orders",
+      element: (
+        <RequireAuth>
+          <MyOrders />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/my-order/:id",
+      element: (
+        <RequireAuth>
+          <MyOrder />
+        </RequireAuth>
+      ),
+    },
     { path: "/sign-in", element: <SingIn /> },
     { path: "/register", element: <Register /> },
     { path: "*", element: <NotFound /> },

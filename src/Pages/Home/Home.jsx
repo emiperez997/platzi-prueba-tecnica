@@ -8,12 +8,10 @@ function Home() {
 
   const { isLoading, error } = useContext(ShoppingCartContext);
 
+  const { filteredItems } = useContext(ShoppingCartContext);
+
   const searchProduct = (e) => {
-    if (e.target.value.length === 0) {
-      setSearchByTitle("");
-    } else {
-      setSearchByTitle(e.target.value);
-    }
+    setSearchByTitle(e.target.value);
   };
 
   // Reset input
@@ -63,7 +61,7 @@ function Home() {
 
       {!isLoading && !error && (
         <div className="flex flex-row flex-wrap justify-center gap-3 flex-1 w-3/5">
-          {renderView()}
+          {renderView(filteredItems)}
         </div>
       )}
       <ProductDetail />

@@ -13,13 +13,18 @@ function Register() {
     const { email, username, password } = e.target.elements;
 
     if ((!email.value || !password.value, !username.value)) {
-      alert("Please fill all fields");
+      setMessage({
+        text: "Email, username and password are required",
+        type: "error",
+      });
+      return;
     }
 
     addUser({
       email: email.value,
       username: username.value,
       password: password.value,
+      orders: [],
     });
 
     // Clear inputs

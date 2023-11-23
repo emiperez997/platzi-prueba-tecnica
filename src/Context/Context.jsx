@@ -150,7 +150,15 @@ function ShoppingCartProvider({ children }) {
   };
 
   // User - Login
-  const [userLoged, setUserLoged] = useState(null);
+  const { item: userLoged, saveItem: setUserLoged } = useLocalStorage(
+    "userLoged",
+    null
+  );
+
+  const { item: isLogin, saveItem: saveIsLogin } = useLocalStorage(
+    "isLogin",
+    false
+  );
 
   // Message
   const [message, setMessage] = useState({});
@@ -190,6 +198,9 @@ function ShoppingCartProvider({ children }) {
 
         userLoged,
         setUserLoged,
+
+        isLogin,
+        saveIsLogin,
       }}
     >
       {children}

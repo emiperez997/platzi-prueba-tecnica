@@ -7,9 +7,12 @@ function SingIn() {
 
   const { setMessage } = useContext(ShoppingCartContext);
 
+  const { isLogin, saveIsLogin } = useContext(ShoppingCartContext);
+
   const handleSubmit = (e) => {
     if (userLoged) {
       setUserLoged(null);
+      saveIsLogin(false);
       setMessage({
         text: "User logged out successfully",
         type: "success",
@@ -20,7 +23,11 @@ function SingIn() {
       const { email, password } = e.target.elements;
 
       if (!email.value || !password.value) {
-        alert("Please fill all fields");
+        setMessage({
+          text: "Email and password are required",
+          type: "error",
+        });
+        return;
       }
 
       const user = users.find(
@@ -28,7 +35,10 @@ function SingIn() {
       );
 
       if (!user) {
-        alert("User not found");
+        setMessage({
+          text: "Email or password invalid",
+          type: "error",
+        });
         return;
       }
 
@@ -37,6 +47,7 @@ function SingIn() {
       password.value = "";
 
       setUserLoged(user);
+      saveIsLogin(true);
 
       setMessage({
         text: "User logged successfully",
@@ -61,7 +72,7 @@ function SingIn() {
             <label htmlFor="email" className="font-semibold">
               Email:
             </label>
-            {userLoged ? (
+            {isLogin ? (
               <p className="border border-transparent font-bold focus:outline-none">
                 {userLoged.email}
               </p>
@@ -78,7 +89,7 @@ function SingIn() {
             <label htmlFor="password" className="font-semibold">
               Password:
             </label>
-            {userLoged ? (
+            {isLogin ? (
               <p className="border border-transparent font-bold focus:outline-none">
                 {userLoged.password}
               </p>
@@ -88,6 +99,7 @@ function SingIn() {
                 id="password"
                 name="password"
                 className="border border-transparent border-b-black focus:outline-none"
+                required
               />
             )}
           </div>
@@ -95,10 +107,10 @@ function SingIn() {
           <div className="flex flex-col mt-11 gap-5">
             <button
               className={`border border-black w-80 p-2 rounded-lg text-white focus:outline-none ${
-                userLoged ? "bg-red-700" : "bg-black"
+                isLogin ? "bg-red-800" : "bg-black"
               }`}
             >
-              {userLoged ? "Logout" : "Login"}
+              {isLogin ? "Logout" : "Login"}
             </button>
 
             <hr className="mt-5 mb-2 border-b-1 border-black px-6" />

@@ -16,31 +16,9 @@ const getCategoryName = (category) => {
   }
 };
 
-function renderView() {
-  const { category } = useParams();
-
-  const { products } = useContext(ShoppingCartContext);
-
-  const { filteredItemsByTitle, filteredByCategory } =
-    useContext(ShoppingCartContext);
-
-  const { searchByTitle } = useContext(ShoppingCartContext);
-
-  let categoryName;
-  let itemsToRender = products;
-
-  if (searchByTitle.length > 0 || category) {
-    if (category) {
-      categoryName = getCategoryName(category);
-      itemsToRender = filteredByCategory(itemsToRender, categoryName);
-    }
-    itemsToRender = filteredItemsByTitle(itemsToRender);
-  } else {
-    itemsToRender = products;
-  }
-
-  if (itemsToRender?.length > 0) {
-    return itemsToRender?.map((product) => (
+function renderView(filteredItems) {
+  if (filteredItems?.length > 0) {
+    return filteredItems?.map((product) => (
       <Card
         key={product.id}
         id={product.id}
