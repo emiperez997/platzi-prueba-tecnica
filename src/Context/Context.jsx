@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { useLocalStorage } from "./useLocalStorage";
 
 const ShoppingCartContext = createContext();
 
@@ -125,6 +126,35 @@ function ShoppingCartProvider({ children }) {
       );
   }, [products, searchByTitle, searchByCategory]);
 
+  // User - LocalStorage
+  const {
+    item: users,
+    saveItem: saveUsers,
+    error: userError,
+  } = useLocalStorage("users", []);
+
+  const addUser = (user) => {
+    const newUsers = [...users];
+
+    if (
+      users.find((u) => u.email === user.email) ||
+      users.find((u) => u.username === user.username)
+    ) {
+      alert("User already exists");
+      return;
+    }
+
+    newUsers.push(user);
+
+    saveUsers(newUsers);
+  };
+
+  // User - Login
+  const [userLoged, setUserLoged] = useState(null);
+
+  // Message
+  const [message, setMessage] = useState({});
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -152,6 +182,14 @@ function ShoppingCartProvider({ children }) {
         setSearchByCategory,
         isLoading,
         error,
+        users,
+        addUser,
+
+        message,
+        setMessage,
+
+        userLoged,
+        setUserLoged,
       }}
     >
       {children}

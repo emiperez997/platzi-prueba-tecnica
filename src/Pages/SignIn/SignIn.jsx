@@ -1,18 +1,54 @@
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { ShoppingCartContext } from "../../Context/Context";
+
 function SingIn() {
+  const { users, setUserLoged, userLoged } = useContext(ShoppingCartContext);
+
+  const { setMessage } = useContext(ShoppingCartContext);
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (userLoged) {
+      setUserLoged(null);
+      setMessage({
+        text: "User logged out successfully",
+        type: "success",
+      });
+    } else {
+      e.preventDefault();
 
-    const { email, password } = e.target.elements;
+      const { email, password } = e.target.elements;
 
-    if (!email.value || !password.value) {
-      alert("Please fill all fields");
+      if (!email.value || !password.value) {
+        alert("Please fill all fields");
+      }
+
+      const user = users.find(
+        (user) => user.email === email.value && user.password === password.value
+      );
+
+      if (!user) {
+        alert("User not found");
+        return;
+      }
+
+      // Clear inputs
+      email.value = "";
+      password.value = "";
+
+      setUserLoged(user);
+
+      setMessage({
+        text: "User logged successfully",
+        type: "success",
+      });
     }
   };
 
   return (
     <>
       <div className="flex relative items-center justify-center w-80 mb-4 text-center">
-        <h1 className="font-medium text-xl">Products</h1>
+        <h1 className="font-medium text-xl">Login</h1>
       </div>
 
       <div>
@@ -25,33 +61,57 @@ function SingIn() {
             <label htmlFor="email" className="font-semibold">
               Email:
             </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="border border-transparent border-b-black focus:outline-none"
-            />
+            {userLoged ? (
+              <p className="border border-transparent font-bold focus:outline-none">
+                {userLoged.email}
+              </p>
+            ) : (
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="border border-transparent border-b-black focus:outline-none"
+              />
+            )}
           </div>
           <div className="flex justify-between w-80">
             <label htmlFor="password" className="font-semibold">
-              Password:{" "}
+              Password:
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="border border-transparent border-b-black focus:outline-none"
-            />
+            {userLoged ? (
+              <p className="border border-transparent font-bold focus:outline-none">
+                {userLoged.password}
+              </p>
+            ) : (
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="border border-transparent border-b-black focus:outline-none"
+              />
+            )}
           </div>
 
           <div className="flex flex-col mt-11 gap-5">
-            <button className="border border-black w-80 p-2 rounded-lg bg-black text-white focus:outline-none ">
-              Login
+            <button
+              className={`border border-black w-80 p-2 rounded-lg text-white focus:outline-none ${
+                userLoged ? "bg-red-700" : "bg-black"
+              }`}
+            >
+              {userLoged ? "Logout" : "Login"}
             </button>
 
-            <button className="border border-black w-80 p-2 rounded-lg focus:outline-none ">
-              Sign Up
-            </button>
+            <hr className="mt-5 mb-2 border-b-1 border-black px-6" />
+
+            <div className="flex flex-col w-full gap-5 justify-center">
+              <p className="text-center">Don't you have an account?</p>
+              <Link
+                to="/register"
+                className="border border-black w-80 p-2 rounded-lg focus:outline-none text-center"
+              >
+                Sign Up
+              </Link>
+            </div>
           </div>
         </form>
       </div>

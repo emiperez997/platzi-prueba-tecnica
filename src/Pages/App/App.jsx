@@ -1,5 +1,8 @@
 import { useRoutes, BrowserRouter } from "react-router-dom";
-import { ShoppingCartProvider } from "../../Context/Context";
+import {
+  ShoppingCartContext,
+  ShoppingCartProvider,
+} from "../../Context/Context";
 
 import { Home } from "../Home/Home";
 import { MyAccount } from "../MyAccount/MyAccount";
@@ -11,6 +14,9 @@ import "./App.css";
 import { Navbar } from "../../Components/Navbar/Navbar";
 import { Layout } from "../../Components/Layout/Layout";
 import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu/CheckoutSideMenu";
+import { Register } from "../Register/Register";
+import { useContext } from "react";
+import { Message } from "../../Components/Message/Message";
 
 const AppRoutes = () => {
   let routes = useRoutes([
@@ -21,6 +27,7 @@ const AppRoutes = () => {
     { path: "/my-orders", element: <MyOrders /> },
     { path: "/my-order/:id", element: <MyOrder /> },
     { path: "/sign-in", element: <SingIn /> },
+    { path: "/register", element: <Register /> },
     { path: "*", element: <NotFound /> },
   ]);
 
@@ -28,16 +35,19 @@ const AppRoutes = () => {
 };
 
 function App() {
+  const { message } = useContext(ShoppingCartContext);
+
   return (
-    <ShoppingCartProvider>
-      <BrowserRouter>
-        <Navbar />
-        <CheckoutSideMenu />
-        <Layout>
-          <AppRoutes />
-        </Layout>
-      </BrowserRouter>
-    </ShoppingCartProvider>
+    <BrowserRouter>
+      <Navbar />
+      <CheckoutSideMenu />
+      <Layout>
+        {message.text && message.type && (
+          <Message type={message.type}>{message.text}</Message>
+        )}
+        <AppRoutes />
+      </Layout>
+    </BrowserRouter>
   );
 }
 
